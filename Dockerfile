@@ -1,10 +1,10 @@
-FROM ubuntu:latest
+FROM ubuntu:quantal
 MAINTAINER Fernando Mayo <fernando@tutum.co>
 
 # Install packages
 RUN apt-get update
 RUN apt-get -y upgrade
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install git apache2 libapache2-mod-php5 php5-mysql
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install supervisor git apache2 libapache2-mod-php5 php5-mysql
 
 # Add image configuration and scripts
 ADD ./start.sh /start.sh
