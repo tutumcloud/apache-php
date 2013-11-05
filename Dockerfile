@@ -12,3 +12,6 @@ ADD ./supervisord-apache2.conf /etc/supervisor/conf.d/supervisord-apache2.conf
 
 # Configure /app folder
 RUN mkdir -p /app && rm -fr /var/www && ln -s /app /var/www
+
+EXPOSE 80
+CMD ["/run.sh"]
