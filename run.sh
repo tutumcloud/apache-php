@@ -1,2 +1,2 @@
 #!/bin/bash
-supervisord -n
+exec supervisord -n
