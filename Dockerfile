@@ -10,7 +10,8 @@ ADD run.sh /run.sh
 RUN chmod 755 /*.sh
 ADD supervisord-apache2.conf /etc/supervisor/conf.d/supervisord-apache2.conf
 
-# Configure /app folder
+# Configure /app folder with sample app
+RUN git clone https://github.com/fermayo/hello-world-php.git /app
 RUN mkdir -p /app && rm -fr /var/www && ln -s /app /var/www
 
 EXPOSE 80

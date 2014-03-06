@@ -7,51 +7,47 @@ Base docker image to run PHP applications on Apache
 Usage
 -----
 
-To create the image `tutum/docker-php`, execute the following command on the tutum-docker-php folder:
+To create the image `tutum/apache-php`, execute the following command on the tutum-docker-php folder:
 
-	docker build -t tutum/docker-php .
-
-
-Installing your PHP application
--------------------------------
-
-To install your application, copy your code inside the image in `/app`. For example, if using git:
-
-	sudo docker run -d tutum/docker-php git clone https://github.com/fermayo/hello-world-php.git /app
+	docker build -t tutum/apache-php .
 
 
-It will print the new container ID (like `d35bf1374e88`). To create an image from that, execute:
+Running your Apache+PHP docker image
+------------------------------------
 
-	sudo docker commit d35bf1374e88 tutum/hello-world-php
+Start your image binding the external ports 80 in all interfaces to your container:
 
+	docker run -d -p 80:80 tutum/apache-php
 
-You can now push your changes to the registry:
+Test your deployment:
 
-	sudo docker push tutum/hello-world-php
-
-
-
-Running your PHP application
-----------------------------
-
-Pull your container if it's not yet on your local docker machine:
-
-	sudo docker pull tutum/hello-world-php
-
-
-Run the `/run.sh` script to start apache (via supervisor):
-
-	sudo docker run -d -p 80 tutum/hello-world-php /run.sh
-
-
-It will print the new container ID (like `d35bf1374e88`). Get the allocated external port:
-
-	sudo docker port d35bf1374e88 80
-
-
-It will print the allocated port (like 4751). Test your deployment:
-
-	curl http://localhost:4751/
-
+	curl http://localhost/
 
 Hello world!
+
+
+Loading your custom PHP application
+-----------------------------------
+
+In order to replace the "Hello World" application that comes bundled with this docker image,
+create a new `Dockerfile` in an empty folder with the following contents:
+
+	FROM tutum/apache-php:latest
+	RUN rm -fr /app && git clone https://github.com/username/customapp.git /app
+	EXPOSE 80
+	CMD ['/run.sh']
+
+replacing `https://github.com/username/customapp.git` with your application's GIT repository.
+After that, build the new `Dockerfile`:
+
+	docker build -t username/my-php-app .
+
+And test it:
+
+	docker run -d -p 80:80 username/my-php-app
+
+Test your deployment:
+
+	curl http://localhost/
+
+That's it!
