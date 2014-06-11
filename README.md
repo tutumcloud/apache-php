@@ -35,7 +35,7 @@ create a new `Dockerfile` in an empty folder with the following contents:
 	FROM tutum/apache-php:latest
 	RUN rm -fr /app && git clone https://github.com/username/customapp.git /app
 	EXPOSE 80
-	CMD ['/run.sh']
+	CMD ["/run.sh"]
 
 replacing `https://github.com/username/customapp.git` with your application's GIT repository.
 After that, build the new `Dockerfile`:
