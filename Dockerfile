@@ -1,4 +1,4 @@
-FROM ubuntu:trusty
+FROM ubuntu:trusty                                                                                                     
 MAINTAINER Fernando Mayo <fernando@tutum.co>
 
 # Install packages
@@ -14,4 +14,4 @@ RUN git clone https://github.com/fermayo/hello-world-php.git /app
 RUN mkdir -p /app && rm -fr /var/www/html && ln -s /app /var/www/html
 
 EXPOSE 80
-cmd ["supervisord", "-n"]   
+cmd ["supervisord", "-n"]
