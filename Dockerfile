@@ -1,4 +1,4 @@
-FROM ubuntu:trusty
+FROM ubuntu:trusty                                                                                                     
 MAINTAINER Fernando Mayo <fernando@tutum.co>
 
 # Install packages
@@ -18,9 +18,6 @@ RUN apt-get update \
 RUN sed -i "s/variables_order.*/variables_order = \"EGPCS\"/g" /etc/php5/apache2/php.ini
 
 # Add image configuration and scripts
-ADD start.sh /start.sh
-ADD run.sh /run.sh
-RUN chmod 755 /*.sh
 ADD supervisord-apache2.conf /etc/supervisor/conf.d/supervisord-apache2.conf
 
 # Configure /app folder with sample app
@@ -28,4 +25,4 @@ RUN git clone https://github.com/fermayo/hello-world-php.git /app
 RUN mkdir -p /app && rm -fr /var/www/html && ln -s /app /var/www/html
 
 EXPOSE 80
-CMD ["/run.sh"]
+cmd ["supervisord", "-n"]
