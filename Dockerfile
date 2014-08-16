@@ -27,6 +27,7 @@ ADD sample/ /app
 # Add application code onbuild
 ONBUILD RUN rm -fr /app
 ONBUILD ADD . /app
+ONBUILD RUN chown www-data:www-data /app -R
 
 EXPOSE 80
 WORKDIR /app
