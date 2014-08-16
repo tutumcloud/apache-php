@@ -1,31 +1,32 @@
 FROM ubuntu:trusty
 MAINTAINER Fernando Mayo <fernando@tutum.co>
 
-# Install packages
-RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get -y install \
-        supervisor \
-        git \
+# Install base packages
+ENV DEBIAN_FRONTEND noninteractive
+RUN apt-get update
+RUN apt-get -y install \
+        curl \
         apache2 \
         libapache2-mod-php5 \
         php5-mysql \
         php5-gd \
+        php5-curl \
         php-pear \
-        php-apc \
-        curl \
-    && rm -rf /var/lib/apt/lists/* \
-    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-RUN sed -i "s/variables_order.*/variables_order = \"EGPCS\"/g" /etc/php5/apache2/php.ini
+        php-apc
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Add image configuration and scripts
-ADD start.sh /start.sh
 ADD run.sh /run.sh
 RUN chmod 755 /*.sh
-ADD supervisord-apache2.conf /etc/supervisor/conf.d/supervisord-apache2.conf
 
 # Configure /app folder with sample app
-RUN git clone https://github.com/fermayo/hello-world-php.git /app
 RUN mkdir -p /app && rm -fr /var/www/html && ln -s /app /var/www/html
+ADD sample/ /app
+
+# Add application code onbuild
+ONBUILD RUN rm -fr /app
+ONBUILD ADD . /app
 
 EXPOSE 80
+WORKDIR /app
 CMD ["/run.sh"]

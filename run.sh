@@ -1,2 +1,3 @@
 #!/bin/bash
-exec supervisord -n
+source /etc/apache2/envvars
+exec apache2 -D FOREGROUND
