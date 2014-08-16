@@ -13,6 +13,7 @@ RUN apt-get -y install \
         php5-curl \
         php-pear \
         php-apc
+RUN sed -i "s/variables_order.*/variables_order = \"EGPCS\"/g" /etc/php5/apache2/php.ini
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Add image configuration and scripts
