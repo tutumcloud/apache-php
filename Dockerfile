@@ -3,8 +3,8 @@ MAINTAINER Fernando Mayo <fernando@tutum.co>
 
 # Install base packages
 ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update
-RUN apt-get -y install \
+RUN apt-get update && \
+    apt-get -yq install \
         curl \
         apache2 \
         libapache2-mod-php5 \
@@ -12,7 +12,8 @@ RUN apt-get -y install \
         php5-gd \
         php5-curl \
         php-pear \
-        php-apc
+        php-apc && \
+    rm -rf /var/lib/apt/lists/*
 RUN sed -i "s/variables_order.*/variables_order = \"EGPCS\"/g" /etc/php5/apache2/php.ini
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
