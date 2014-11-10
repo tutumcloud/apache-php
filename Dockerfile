@@ -25,11 +25,6 @@ RUN chmod 755 /*.sh
 RUN mkdir -p /app && rm -fr /var/www/html && ln -s /app /var/www/html
 ADD sample/ /app
 
-# Add application code onbuild
-ONBUILD RUN rm -fr /app
-ONBUILD ADD . /app
-ONBUILD RUN chown www-data:www-data /app -R
-
 EXPOSE 80
 WORKDIR /app
 CMD ["/run.sh"]
