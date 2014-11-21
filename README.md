@@ -56,7 +56,7 @@ Create a Dockerfile like the following:
 
     FROM tutum/apache-php
     RUN apt-get update && apt-get install -yq git && rm -rf /var/lib/apt/lists/*
-    RUN RUN rm -fr /app
+    RUN rm -fr /app
     ADD . /app
     RUN composer install
 
