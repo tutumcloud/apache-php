@@ -7,6 +7,7 @@ RUN apt-get update && \
     apt-get -yq install \
         curl \
         apache2 \
+        apache2-utils \
         libapache2-mod-php5 \
         php5-mysql \
         php5-gd \
@@ -18,7 +19,7 @@ RUN sed -i "s/variables_order.*/variables_order = \"EGPCS\"/g" /etc/php5/apache2
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # override default logging configs and enable log roation
-ADD config/000-default.config /etc/apache2/sites-available/000-default.config
+ADD config/000-default.conf /etc/apache2/sites-available/000-default.conf
 ADD config/default-ssl.conf /etc/apache2/sites-available/default-ssl.conf
 ADD config/other-vhosts-access-log.conf  /etc/apache2/conf-available/default-ssl.conf
 
@@ -33,5 +34,5 @@ ADD sample/ /app
 EXPOSE 80
 WORKDIR /app
 # for log cleanup/access
-VOLUME /var/log/apache2
+VOLUME [ "/var/log/apache2" ]
 CMD ["/run.sh"]
