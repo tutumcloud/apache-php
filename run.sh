@@ -1,1 +1,4 @@
- docker run --name ap -p 80:80 -v /opt/wiki/logs:/var/log/apache2 -d  kryton/apache-php 
+#!/bin/bash
+chown www-data:www-data /app -R
+source /etc/apache2/envvars
+exec apache2 -D FOREGROUND
