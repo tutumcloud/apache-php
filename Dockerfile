@@ -2,9 +2,8 @@ FROM ubuntu:trusty
 MAINTAINER Fernando Mayo <fernando@tutum.co>
 
 # Install base packages
-ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && \
-    apt-get -yq install \
+    DEBIAN_FRONTEND=noninteractive apt-get -yq install \
         curl \
         apache2 \
         libapache2-mod-php5 \
@@ -13,9 +12,10 @@ RUN apt-get update && \
         php5-curl \
         php-pear \
         php-apc && \
-    rm -rf /var/lib/apt/lists/*
-RUN sed -i "s/variables_order.*/variables_order = \"EGPCS\"/g" /etc/php5/apache2/php.ini
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+    rm -rf /var/lib/apt/lists/* && \
+    curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf && \
+    sed -i "s/variables_order.*/variables_order = \"EGPCS\"/g" /etc/php5/apache2/php.ini
 
 # Add image configuration and scripts
 ADD run.sh /run.sh
