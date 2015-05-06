@@ -26,10 +26,18 @@ Test your deployment:
 Hello world!
 
 
+Enable .htaccess files
+------------------------------------
+
+If you app uses .htaccess files you need to pass the ALLOW_OVERRIDE environment variable
+
+    docker run -d -p 80:80 -e ALLOW_OVERRIDE=true tutum/apache-php
+
+
 Loading your custom PHP application
 -----------------------------------
 
-This image can be used as a base image for your PHP application. Create a new `Dockerfile` in your 
+This image can be used as a base image for your PHP application. Create a new `Dockerfile` in your
 PHP application folder with the following contents:
 
     FROM tutum/apache-php
