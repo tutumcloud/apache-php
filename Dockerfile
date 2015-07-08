@@ -6,6 +6,7 @@ RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get -yq install \
         curl \
         apache2 \
+        apache2-utils \
         libapache2-mod-php5 \
         php5-mysql \
         php5-mcrypt \
@@ -21,6 +22,11 @@ RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf && \
 
 ENV ALLOW_OVERRIDE **False**
 
+# override default logging configs and enable log roation
+ADD config/000-default.conf /etc/apache2/sites-available/000-default.conf
+ADD config/default-ssl.conf /etc/apache2/sites-available/default-ssl.conf
+ADD config/other-vhosts-access-log.conf  /etc/apache2/conf-available/default-ssl.conf
+
 # Add image configuration and scripts
 ADD run.sh /run.sh
 RUN chmod 755 /*.sh
@@ -31,4 +37,6 @@ ADD sample/ /app
 
 EXPOSE 80
 WORKDIR /app
+# for log cleanup/access
+VOLUME [ "/var/log/apache2" ]
 CMD ["/run.sh"]
