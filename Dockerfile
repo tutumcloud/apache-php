@@ -5,6 +5,7 @@ MAINTAINER Fernando Mayo <fernando@tutum.co>
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get -yq install \
         curl \
+        wget \
         apache2 \
         libapache2-mod-php5 \
         php5-mysql \
@@ -29,6 +30,15 @@ RUN chmod 755 /*.sh
 RUN mkdir -p /app && rm -fr /var/www/html && ln -s /app /var/www/html
 ADD sample/ /app
 
+# Configure letsencrypt
+RUN cd /usr/local/sbin && \
+    wget https://dl.eff.org/certbot-auto
+RUN chmod a+x /usr/local/sbin/certbot-auto
+RUN certbot-auto --apache -d example.com  -w /var/www/html \
+   --non-interactive --agree-tos --email admin@evolane.com
+
 EXPOSE 80
+EXPOSE 443
+
 WORKDIR /app
 CMD ["/run.sh"]
