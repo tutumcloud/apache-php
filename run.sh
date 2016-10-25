@@ -10,4 +10,11 @@ fi
 
 source /etc/apache2/envvars
 tail -F /var/log/apache2/* &
-exec apache2 -D FOREGROUND
+
+exec apache2 &
+sleep 3
+exec cron start &
+sleep 3
+echo "generate certs"
+echo "y" | certbot-auto --apache -d ${DOMAIN} -w /var/www/html -n ${STAGING} --agree-tos
+wait

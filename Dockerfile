@@ -1,5 +1,5 @@
 FROM ubuntu:trusty
-MAINTAINER Fernando Mayo <fernando@tutum.co>
+MAINTAINER Lorenz Vanthillo <lorenz.vanthillo@outlook.com> 
 
 # Install base packages
 RUN apt-get update && \
@@ -22,6 +22,13 @@ RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf && \
 
 ENV ALLOW_OVERRIDE **False**
 
+# Add cron script to renew certs
+ADD cron/crontab /etc/
+RUN rm -r /etc/cron.weekly/
+ADD cron/update /etc/cron.weekly/
+RUN chmod +x /etc/cron.weekly/update
+
+
 # Add image configuration and scripts
 ADD run.sh /run.sh
 RUN chmod 755 /*.sh
@@ -34,11 +41,7 @@ ADD sample/ /app
 RUN cd /usr/local/sbin && \
     wget https://dl.eff.org/certbot-auto
 RUN chmod a+x /usr/local/sbin/certbot-auto
-RUN certbot-auto --apache -d example.com  -w /var/www/html \
-   --non-interactive --agree-tos --email admin@evolane.com
 
-EXPOSE 80
 EXPOSE 443
 
-WORKDIR /app
 CMD ["/run.sh"]
