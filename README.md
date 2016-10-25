@@ -4,8 +4,8 @@ Letsencrypt provides free and secure certificates.
 The container contains a cronjob which recreates the certificates each 7 days.
 
 Info:
-https://letsencrypt.org/
-https://letsencrypt.org/2015/11/09/why-90-days.html
+- https://letsencrypt.org/
+- https://letsencrypt.org/2015/11/09/why-90-days.html
 
 #### Build docker image
 ```
