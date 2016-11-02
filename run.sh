@@ -16,5 +16,5 @@ sleep 3
 exec cron start &
 sleep 3
 echo "generate certs"
-echo "y" | certbot-auto --apache -d ${DOMAIN} -w /var/www/html -n ${STAGING} --agree-tos
+echo "y" | certbot-auto --apache -d ${DOMAIN} -w /var/www/html -n ${STAGING} --agree-tos --email admin@company.com
 wait
