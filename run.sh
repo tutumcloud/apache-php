@@ -17,4 +17,10 @@ exec cron start &
 sleep 3
 echo "generate certs"
 echo "y" | certbot-auto --apache -d ${DOMAIN} -w /var/www/html -n ${STAGING} --agree-tos --email admin@company.com
+
+# redirect 80 to 443
+sed -i '\#DocumentRoot /var/www/html#a\        DOMAIN' /etc/apache2/sites-available/000-default.conf
+sed -i 's@DOMAIN@'"Redirect permanent / https://$DOMAIN"'@' /etc/apache2/sites-available/000-default.conf
+
+service apache2 restart
 wait
