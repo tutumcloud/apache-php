@@ -1,73 +1,36 @@
-tutum-docker-php
-================
+# apache-php
+Docker image to run PHP applications on Apache (with SSH using letsencrypt). 
+Letsencrypt provides free and secure certificates.
+The container contains a cronjob which recreates the certificates each 7 days.
 
-Base docker image to run PHP applications on Apache
+Info:
+- https://letsencrypt.org/
+- https://letsencrypt.org/2015/11/09/why-90-days.html
 
+#### Build docker image
+```
+docker build -t lorenzvth7/apache-php .
+```
 
-Building the base image
------------------------
+#### Run the container
+```
+docker run -d \
+-p 443:443 \
+-e DOMAIN="www.my-domain.com" \
+-e STAGING="--staging" \
+--restart=always \
+-v /my/local/code:/app/ \
+lorenzvth7/apache-php
+```
 
-To create the base image `tutum/apache-php`, execute the following command on the tutum-docker-php folder:
+The staging option provides a possibility to test your setup. This will create fake certificates (because you can only ask 5 real certificates each week).
+If you want to use the real certificates:
 
-    docker build -t tutum/apache-php .
-
-
-Running your Apache+PHP docker image
-------------------------------------
-
-Start your image binding the external ports 80 in all interfaces to your container:
-
-    docker run -d -p 80:80 tutum/apache-php
-
-Test your deployment:
-
-    curl http://localhost/
-
-Hello world!
-
-
-Enable .htaccess files
-------------------------------------
-
-If you app uses .htaccess files you need to pass the ALLOW_OVERRIDE environment variable
-
-    docker run -d -p 80:80 -e ALLOW_OVERRIDE=true tutum/apache-php
-
-
-Loading your custom PHP application
------------------------------------
-
-This image can be used as a base image for your PHP application. Create a new `Dockerfile` in your
-PHP application folder with the following contents:
-
-    FROM tutum/apache-php
-
-After that, build the new `Dockerfile`:
-
-    docker build -t username/my-php-app .
-
-And test it:
-
-    docker run -d -p 80:80 username/my-php-app
-
-Test your deployment:
-
-    curl http://localhost/
-
-That's it!
-
-
-Loading your custom PHP application with composer requirements
---------------------------------------------------------------
-
-Create a Dockerfile like the following:
-
-    FROM tutum/apache-php
-    RUN apt-get update && apt-get install -yq git && rm -rf /var/lib/apt/lists/*
-    RUN rm -fr /app
-    ADD . /app
-    RUN composer install
-
-- Replacing `git` with any dependencies that your composer packages might need.
-- Add your php application to `/app`
-
+```
+docker run -d \
+-p 443:443 \
+-e DOMAIN="www.my-domain.com" \
+--restart=always \
+-v /my/local/code:/app/ \
+lorenzvth7/apache-php
+```
